@@ -1,0 +1,27 @@
+{
+  "servers": {
+    "gitlabIssueCreator": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["${workspaceFolder}/dist/index.js"],
+      "env": {
+        "GITLAB_URL": "${input:gitlab-url}",
+        "GITLAB_TOKEN": "${input:gitlab-token}"
+      }
+    }
+  },
+  "inputs": [
+    {
+      "type": "promptString",
+      "id": "gitlab-url",
+      "description": "GitLab base URL (e.g. https://gitlab.company.com)",
+      "default": "https://gitlab.org"
+    },
+    {
+      "type": "promptString",
+      "id": "gitlab-token",
+      "description": "GitLab access token (PAT or Project Access Token)",
+      "password": true
+    }
+  ]
+}
