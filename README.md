@@ -7,7 +7,7 @@ An MCP server that creates GitLab issues, compatible with self-hosted instances 
 - `create_gitlab_issue`
   - Required: `title`, `projectId`
   - Optional: `description`, `labels`, `assigneeIds`, `milestoneId`, `dueDate`, `confidential`
-  - Optional overrides: `gitlabUrl`, `gitlabToken` (prefer env vars)
+  - Optional overrides: `gitlabUrl` (token must come from env)
 
 ## Configuration
 
@@ -27,7 +27,7 @@ Prerequisites:
 Install into an existing project:
 
 ```sh
-npm install gitlab-issue-creator-mcp
+npm install gitlab-issue-creator-mcp -D
 ```
 
 ## MCP client setup (npm install)
@@ -62,11 +62,6 @@ Recommended flow for teammates:
 2. Install + build: `npm install && npm run build`
 3. Open the repo folder in VS Code
 4. Start the MCP server (Chat tool picker or `MCP: List Servers`)
-
-VS Code will prompt for:
-
-- GitLab base URL (defaults to `https://gitlab.com`)
-- GitLab access token (stored securely by VS Code)
 
 ## Develop / Build
 

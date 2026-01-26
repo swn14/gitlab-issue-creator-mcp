@@ -13,7 +13,6 @@ type CreateGitLabIssueArgs = {
 
   // Optional overrides; prefer env vars
   gitlabUrl?: string;
-  gitlabToken?: string;
 };
 
 type GitLabIssueResponse = {
@@ -42,7 +41,7 @@ async function createGitLabIssue(params: CreateGitLabIssueArgs) {
   const baseUrl = normalizeBaseUrl(
     params.gitlabUrl ?? process.env.GITLAB_URL ?? "https://gitlab.com",
   );
-  const token = params.gitlabToken ?? requiredEnv("GITLAB_TOKEN");
+  const token = requiredEnv("GITLAB_TOKEN");
   const projectId = params.projectId;
 
   const apiUrl = `${baseUrl}/api/v4/projects/${encodeURIComponent(projectId)}/issues`;
@@ -125,11 +124,6 @@ export const createGitLabIssueTool: Tool = {
         description:
           "Optional override for GitLab base URL. Otherwise uses GITLAB_URL env var (defaults to https://gitlab.com).",
       },
-      gitlabToken: {
-        type: "string",
-        description:
-          "Optional override for GitLab token. Otherwise uses GITLAB_TOKEN env var.",
-      },
     },
   },
 };
@@ -155,7 +149,6 @@ export async function handleCreateGitLabIssue(rawArgs: unknown) {
     confidential: args.confidential,
     projectId: args.projectId,
     gitlabUrl: args.gitlabUrl,
-    gitlabToken: args.gitlabToken,
   });
 
   return {
