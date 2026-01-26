@@ -1,6 +1,6 @@
 # GitLab Issue Creator (MCP Server)
 
-An MCP server that creates GitLab issues, compatible with self-hosted instances (default: <https://gitlab.org>).
+An MCP server that creates GitLab issues, compatible with self-hosted instances (default: <https://gitlab.com>).
 
 ## Tools
 
@@ -13,7 +13,7 @@ An MCP server that creates GitLab issues, compatible with self-hosted instances 
 
 Set env vars (recommended):
 
-- `GITLAB_URL` (defaults to `https://gitlab.org`)
+- `GITLAB_URL` (defaults to `https://gitlab.com`)
 - `GITLAB_TOKEN` (required)
 
 See [.env.example](.env.example).
@@ -41,7 +41,7 @@ Most MCP clients expect a stdio server. If you installed this package into a pro
       "command": "node",
       "args": ["./node_modules/gitlab-issue-creator-mcp/dist/index.js"],
       "env": {
-        "GITLAB_URL": "https://gitlab.org",
+        "GITLAB_URL": "https://gitlab.com",
         "GITLAB_TOKEN": "<your_token>"
       }
     }
@@ -52,7 +52,7 @@ Most MCP clients expect a stdio server. If you installed this package into a pro
 Notes:
 
 - Some clients require an absolute path for `args[0]`. In that case, replace the relative `./node_modules/...` path with an absolute path on your machine.
-- `GITLAB_TOKEN` is required; `GITLAB_URL` defaults to `https://gitlab.org`.
+- `GITLAB_TOKEN` is required; `GITLAB_URL` defaults to `https://gitlab.com`.
 
 ## Develop (from source)
 
@@ -65,7 +65,7 @@ Recommended flow for teammates:
 
 VS Code will prompt for:
 
-- GitLab base URL (defaults to `https://gitlab.org`)
+- GitLab base URL (defaults to `https://gitlab.com`)
 - GitLab access token (stored securely by VS Code)
 
 ## Develop / Build

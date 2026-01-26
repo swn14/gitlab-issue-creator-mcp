@@ -40,7 +40,7 @@ function normalizeBaseUrl(url: string): string {
 
 async function createGitLabIssue(params: CreateGitLabIssueArgs) {
   const baseUrl = normalizeBaseUrl(
-    params.gitlabUrl ?? process.env.GITLAB_URL ?? "https://gitlab.org",
+    params.gitlabUrl ?? process.env.GITLAB_URL ?? "https://gitlab.com",
   );
   const token = params.gitlabToken ?? requiredEnv("GITLAB_TOKEN");
   const projectId = params.projectId;
@@ -123,7 +123,7 @@ export const createGitLabIssueTool: Tool = {
       gitlabUrl: {
         type: "string",
         description:
-          "Optional override for GitLab base URL. Otherwise uses GITLAB_URL env var (defaults to https://gitlab.org).",
+          "Optional override for GitLab base URL. Otherwise uses GITLAB_URL env var (defaults to https://gitlab.com).",
       },
       gitlabToken: {
         type: "string",

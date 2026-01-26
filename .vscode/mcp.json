@@ -15,7 +15,7 @@
       "type": "promptString",
       "id": "gitlab-url",
       "description": "GitLab base URL (e.g. https://gitlab.company.com)",
-      "default": "https://gitlab.org"
+      "default": "https://gitlab.com"
     },
     {
       "type": "promptString",
