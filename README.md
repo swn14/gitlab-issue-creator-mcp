@@ -18,7 +18,43 @@ Set env vars (recommended):
 
 See [.env.example](.env.example).
 
-## Team setup
+## Install (from npm)
+
+Prerequisites:
+
+- Node.js >= 18
+
+Install into an existing project:
+
+```sh
+npm install gitlab-issue-creator-mcp
+```
+
+## MCP client setup (npm install)
+
+Most MCP clients expect a stdio server. If you installed this package into a project, point your MCP client at the installed `dist/index.js`:
+
+```json
+{
+  "mcpServers": {
+    "gitlab-issue-creator": {
+      "command": "node",
+      "args": ["./node_modules/gitlab-issue-creator-mcp/dist/index.js"],
+      "env": {
+        "GITLAB_URL": "https://gitlab.org",
+        "GITLAB_TOKEN": "<your_token>"
+      }
+    }
+  }
+}
+```
+
+Notes:
+
+- Some clients require an absolute path for `args[0]`. In that case, replace the relative `./node_modules/...` path with an absolute path on your machine.
+- `GITLAB_TOKEN` is required; `GITLAB_URL` defaults to `https://gitlab.org`.
+
+## Develop (from source)
 
 Recommended flow for teammates:
 
@@ -38,36 +74,13 @@ VS Code will prompt for:
 - Build: `npm run build`
 - Run: `GITLAB_TOKEN=... npm start`
 
-## MCP client config (example)
-
-## VS Code MCP setup
-
-This repo includes a workspace MCP configuration at [.vscode/mcp.json](.vscode/mcp.json).
-
-1. Build the server: `npm install && npm run build`
-2. In VS Code, run `MCP: List Servers` (or open the Chat view tool picker)
-3. Start/trust the `gitlabIssueCreator` server when prompted
-
-VS Code will prompt for the GitLab URL (defaulting to `https://gitlab.org`) and the token (stored securely via input variables).
-
-Most MCP clients expect a stdio server:
-
-```json
-{
-  "mcpServers": {
-    "gitlab-issue-creator": {
-      "command": "node",
-      "args": ["/absolute/path/to/gitlab-issue-creator/dist/index.js"],
-      "env": {
-        "GITLAB_URL": "https://gitlab.org",
-        "GITLAB_TOKEN": "<your_token>"
-      }
-    }
-  }
-}
-```
+If you want to run the server from a local clone (instead of installing from npm), build it and point your MCP client at `dist/index.js`.
 
 ## Notes
 
 - Prefer a Project Access Token or a PAT scoped as narrowly as possible.
 - This server prints no secrets, but your MCP client should keep tokens out of logs.
+
+## License
+
+MIT. See [LICENSE](LICENSE).
