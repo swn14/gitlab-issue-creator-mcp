@@ -22,7 +22,7 @@ const server = new Server(
   },
 );
 
-server.server.setRequestHandler(ListToolsRequestSchema, async () => {
+server.setRequestHandler(ListToolsRequestSchema, async () => {
   return {
     tools: [createGitLabIssueTool],
   };
