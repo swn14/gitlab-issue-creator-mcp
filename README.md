@@ -30,20 +30,18 @@ Install into an existing project:
 npm install gitlab-issue-creator-mcp -D
 ```
 
-## MCP client setup (npm install)
+## VS Code MCP setup (npm install)
 
-Most MCP clients expect a stdio server. If you installed this package into a project, point your MCP client at the installed `dist/index.js`:
+VS Code MCP servers are typically configured in `.vscode/mcp.json`. If you installed this package into a project, point VS Code at the installed `dist/index.js` and use `envFile` to load secrets from a local `.env` file:
 
 ```json
 {
-  "mcpServers": {
-    "gitlab-issue-creator": {
+  "servers": {
+    "gitlab-issue-creator-mcp": {
+      "type": "stdio",
       "command": "node",
       "args": ["./node_modules/gitlab-issue-creator-mcp/dist/index.js"],
-      "env": {
-        "GITLAB_URL": "https://gitlab.com",
-        "GITLAB_TOKEN": "<your_token>"
-      }
+      "envFile": "${workspaceFolder}/.env"
     }
   }
 }
@@ -53,6 +51,7 @@ Notes:
 
 - Some clients require an absolute path for `args[0]`. In that case, replace the relative `./node_modules/...` path with an absolute path on your machine.
 - `GITLAB_TOKEN` is required; `GITLAB_URL` defaults to `https://gitlab.com`.
+- Keep `.env` out of source control (this repo’s `.gitignore` already ignores it). Start from the template: `cp .env.example .env`.
 
 ## Develop (from source)
 
