@@ -3,6 +3,10 @@
     "version": "1.0.6",
     "type": "module",
     "description": "MCP server for creating GitLab issues (self-hosted compatible).",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/swn14/gitlab-issue-creator-mcp.git"
+    },
     "keywords": [
         "mcp",
         "model-context-protocol",
