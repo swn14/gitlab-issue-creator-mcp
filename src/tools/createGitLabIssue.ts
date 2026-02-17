@@ -9,7 +9,7 @@ type CreateGitLabIssueArgs = {
   dueDate?: string; // YYYY-MM-DD
   confidential?: boolean;
 
-  projectId: string;
+  projectId?: string;
 
   // Optional overrides; prefer env vars
   gitlabUrl?: string;
@@ -42,7 +42,23 @@ async function createGitLabIssue(params: CreateGitLabIssueArgs) {
     params.gitlabUrl ?? process.env.GITLAB_URL ?? "https://gitlab.com",
   );
   const token = requiredEnv("GITLAB_TOKEN");
-  const projectId = params.projectId;
+
+  const envProjectId = process.env.GITLAB_PROJECT_ID?.trim();
+  if (envProjectId) {
+    // When GITLAB_PROJECT_ID is set, always use it and ignore any user-supplied value
+    if (params.projectId && params.projectId !== envProjectId) {
+      throw new Error(
+        `GITLAB_PROJECT_ID is set to "${envProjectId}". Cannot create issues in a different project ("${params.projectId}").`,
+      );
+    }
+  }
+
+  const projectId = envProjectId ?? params.projectId;
+  if (!projectId) {
+    throw new Error(
+      "projectId is required. Either set GITLAB_PROJECT_ID env var or pass projectId in the request.",
+    );
+  }
 
   const apiUrl = `${baseUrl}/api/v4/projects/${encodeURIComponent(projectId)}/issues`;
 
@@ -87,20 +103,24 @@ async function createGitLabIssue(params: CreateGitLabIssueArgs) {
   };
 }
 
+const envProjectId = process.env.GITLAB_PROJECT_ID?.trim();
+
 export const createGitLabIssueTool: Tool = {
   name: "create_gitlab_issue",
-  description:
-    "Create a GitLab issue in a project on a self-hosted (or gitlab.com) instance.",
+  description: envProjectId
+    ? `Create a GitLab issue in project "${envProjectId}" on a self-hosted (or gitlab.com) instance. The target project is locked via GITLAB_PROJECT_ID.`
+    : "Create a GitLab issue in a project on a self-hosted (or gitlab.com) instance.",
   inputSchema: {
     type: "object",
     additionalProperties: false,
-    required: ["title", "projectId"],
+    required: envProjectId ? ["title"] : ["title", "projectId"],
     properties: {
       title: { type: "string", description: "Issue title" },
       projectId: {
         type: "string",
-        description:
-          "GitLab project numeric ID or project path (e.g. group/project)",
+        description: envProjectId
+          ? `GitLab project numeric ID or project path. Currently locked to "${envProjectId}" via GITLAB_PROJECT_ID env var.`
+          : "GitLab project numeric ID or project path (e.g. group/project)",
       },
       description: { type: "string", description: "Issue description/body" },
       labels: {
@@ -137,7 +157,11 @@ function assertString(value: unknown, field: string): asserts value is string {
 export async function handleCreateGitLabIssue(rawArgs: unknown) {
   const args = rawArgs as Partial<CreateGitLabIssueArgs>;
   assertString(args.title, "title");
-  assertString(args.projectId, "projectId");
+
+  const lockedProjectId = process.env.GITLAB_PROJECT_ID?.trim();
+  if (!lockedProjectId) {
+    assertString(args.projectId, "projectId");
+  }
 
   const result = await createGitLabIssue({
     title: args.title,
@@ -147,7 +171,7 @@ export async function handleCreateGitLabIssue(rawArgs: unknown) {
     milestoneId: args.milestoneId,
     dueDate: args.dueDate,
     confidential: args.confidential,
-    projectId: args.projectId,
+    projectId: args.projectId as string,
     gitlabUrl: args.gitlabUrl,
   });
 
